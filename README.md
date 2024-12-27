@@ -29,6 +29,6 @@
 
 ### windows系统
 ```powershell
-.\igf [Commend] [Args]
+.\igf.exe [Commend] [Args]
 ```
 
