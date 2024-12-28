@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/oschwald/geoip2-golang"
 	"github.com/spf13/cobra"
-	"hello/util"
+	"log"
 	"net"
 )
 
@@ -25,7 +26,7 @@ var isoCmd = &cobra.Command{
 				invalidIps = append(invalidIps, ip)
 				continue // 如果IP无效，跳过
 			}
-			isoCode := util.GetISObyIP(ip)
+			isoCode := GetISObyIP(ip)
 			if isoCode == "" {
 				// 如果ISO代码为空，输出提示
 				fmt.Printf("IP地址 '%s' 查询不到ISO国家代码。\n", ip)
@@ -42,6 +43,21 @@ var isoCmd = &cobra.Command{
 			}
 		}
 	},
+}
+
+func GetISObyIP(ip string) string {
+	db, err := geoip2.Open("GeoIP2-City.mmdb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	parsedIp := net.ParseIP(ip)
+	record, err := db.City(parsedIp)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return record.Country.IsoCode
 }
 
 func IsValidIP(ip string) bool {
