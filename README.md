@@ -40,3 +40,8 @@
 .\igf.exe [Commend] [Args]
 ```
 
+### 其他系统
+```powershell
+.\igf [Commend] [Args]
+```
+
